@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+
+    <th:block layout:fragment="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">최근 코로나 확진자 수</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <div id="canvas_Chart1" class="canvas">
+                                <canvas id="myChart1" width="80%" height="20%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">최근 코로나 사망자 수</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <div id="canvas_Chart2" class="canvas">
+                                <canvas id="myChart2" width="80%" height="20%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const decide_cnt = new Array();
+            const state_dt = new Array();
+            const death_cnt = new Array();
+
+            $(document).ready(function (){
+
+                $.ajax({
+                    url : "/chart/covidState",
+                    type : "GET",
+                    dataType : "text",
+                    success : function (data) {
+
+                        console.log($(data).find("item"));
+
+                        let datas = $(data).find("item");
+                        let j = 0;
+
+                        for (let i = datas.length - 1; i >= 0; i--){
+                            decide_cnt[j] = $(datas[i]).find("decidecnt").text();
+                            state_dt[j] = $(datas[i]).find("statedt").text();
+                            death_cnt[j] = $(datas[i]).find("deathcnt").text();
+
+                            j++;
+                        }
+
+                        chartDraw1(state_dt, decide_cnt);
+
+                        chartDraw2(state_dt, death_cnt);
+                    }
+                });
+            });
+
+            function chartDraw1(state_dt, decide_cnt) {
+                var canvas1 = document.getElementById("myChart1");
+                var context1 = canvas1.getContext("2d");
+
+                // 픽셀정리
+                context1.clearRect(0, 0, canvas1.width, canvas1.height);
+                // 컨텍스트 리셋
+                context1.beginPath();
+
+                const myChart1 = new Chart(context1, {
+                   type: "line",
+                   data : {
+                       labels : state_dt,
+                       datasets : [{
+                           label : "최근 코로나 확진자 수",
+                           data : decide_cnt,
+                           fill : false,
+                           borderColor : 'rgba(141,221,232,0.7)',
+                           backgroundColor :  'rgba(134,214,229,0.7)',
+                           pointStyle : "circle",
+                           pointRadius : 7,
+                           pointHoverRadius : 8,
+                           tension : 0.1,
+                           stack : 'combined'
+                       }]
+                   }
+                });
+            }
+
+            function chartDraw2(state_dt, death_cnt) {
+                var canvas2= document.getElementById("myChart2");
+                var context2 = canvas2.getContext("2d");
+
+                context2.clearRect(0, 0, canvas2.width, canvas2.height);
+                context2.beginPath();
+
+                const myChart2 = new Chart(context2, {
+                    type: "line",
+                    data : {
+                        labels : state_dt,
+                        datasets : [{
+                            label : "최근 코로나 사망자 수",
+                            data : death_cnt,
+                            fill : false,
+                            borderColor : 'rgba(59,58,58,0.7)',
+                            backgroundColor :  'rgba(59,58,58,0.7)',
+                            pointStyle : "circle",
+                            pointRadius : 7,
+                            pointHoverRadius : 8,
+                            tension : 0.1,
+                            stack : 'combined'
+                        }]
+                    }
+                });
+            }
+        </script>
+    </th:block>
+</html>

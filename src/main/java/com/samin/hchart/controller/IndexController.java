@@ -10,4 +10,14 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    @GetMapping("/main/content")
+    public String layoutDefault(){
+        return "main/content";
+    }
+
+    @GetMapping(value = "/main/home")
+    public String home() {
+        return "main/home";
+    }
 }
