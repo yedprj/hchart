@@ -23,6 +23,11 @@ public class ChartController {
         return "chart/covidChart";
     }
 
+    @GetMapping("/covidVacCenter")
+    public String covidVacCenter() {
+        return "chart/covidVacCenter";
+    }
+
     @RequestMapping(value = "/covidState", method = RequestMethod.GET, produces = "application/text; charset=utf8")
     @ResponseBody
     public String covidState() throws IOException {
@@ -54,6 +59,44 @@ public class ChartController {
 
         rd.close();
         conn.disconnect();
+        System.out.println(sb.toString());
+
+        return sb.toString();
+    }
+
+    @RequestMapping(value = "/centerMarker", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+    @ResponseBody
+    public String centerMarker() throws IOException{
+
+        String urlBuilder = "https://api.odcloud.kr/api/15077586/v1/centers" + "?" + URLEncoder.encode("page", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("1", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("perPage", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("10", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + "=cCe0O4QbmO2jUczHa0UUCsTY6y5SFAITKoWay4sLzMN6IP%2FPb8qcJFbLW5Z4Zp2GAnhiyrgRMAg6afTBn7xJhQ%3D%3D";
+
+        URL url = new URL(urlBuilder);
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/xml;charset=UTF-8");
+        System.out.println("Response code: " + conn.getResponseCode());
+
+        BufferedReader rd;
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300){
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        }else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+
+        rd.close();;
+        conn.disconnect();
+
+        System.out.println("넘어오냐?");
         System.out.println(sb.toString());
 
         return sb.toString();
