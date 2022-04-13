@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/canvas.css}" rel="stylesheet" />
+
+    <!-- navBar start -->
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
+        <div class="sidenav-header">
+            <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+            <a class="navbar-brand m-0" th:href="@{/main/home}" target="_blank">
+                <img th:src="@{/img/logo-ct.png}" class="navbar-brand-img h-100" alt="main_logo">
+                <span class="ms-1 font-weight-bold text-white">COCO - 코로나 커뮤니티</span>
+            </a>
+        </div>
+        <hr class="horizontal light mt-0 mb-2">
+        <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" th:href="@{/main/home}" id="home">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">dashboard</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" th:href="@{/chart/covidChart}" id="covidStatue">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">코로나 최근 현황</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white active bg-gradient-primary" th:href="@{/chart/covidYmChart}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">view_in_ar</i>
+                        </div>
+                        <span class="nav-link-text ms-1">코로나 연도 및 월별 조회</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/chart/covidVacCenter}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">receipt_long</i>
+                        </div>
+                        <span class="nav-link-text ms-1">코로나 예방접종센터</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/pages/rtl.html}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+                        </div>
+                        <span class="nav-link-text ms-1">RTL</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/pages/notifications.html}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">notifications</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Notifications</span>
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/pages/profile.html}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">person</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/pages/sign-in.html}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">login</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sign In</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " th:href="@{/pages/sign-up.html}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">assignment</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sign Up</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <!-- navBar end -->
+
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <!-- top bar start -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page" id="page1">코로나 연도 및 월별 조회</li>
+                    </ol>
+                    <h6 class="font-weight-bolder mb-0" id="page2">코로나 연도 및 월별 조회</h6>
+                </nav>
+                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group input-group-outline">
+                            <label class="form-label">Type here...</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <ul class="navbar-nav  justify-content-end">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <span class="d-sm-inline d-none">Sign In</span>
+                            </a>
+                        </li>
+                        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                                <div class="sidenav-toggler-inner">
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item px-3 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0">
+                                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-bell cursor-pointer"></i>
+                            </a>
+                            <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+                                <li class="mb-2">
+                                    <a class="dropdown-item border-radius-md" href="javascript:;">
+                                        <div class="d-flex py-1">
+                                            <div class="my-auto">
+                                                <img th:src="@{/img/team-2.jpg}" class="avatar avatar-sm  me-3 ">
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="text-sm font-weight-normal mb-1">
+                                                    <span class="font-weight-bold">New message</span> from Laur
+                                                </h6>
+                                                <p class="text-xs text-secondary mb-0">
+                                                    <i class="fa fa-clock me-1"></i>
+                                                    13 minutes ago
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a class="dropdown-item border-radius-md" href="javascript:;">
+                                        <div class="d-flex py-1">
+                                            <div class="my-auto">
+                                                <img th:src="@{/img/small-logos/logo-spotify.svg}" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="text-sm font-weight-normal mb-1">
+                                                    <span class="font-weight-bold">New album</span> by Travis Scott
+                                                </h6>
+                                                <p class="text-xs text-secondary mb-0">
+                                                    <i class="fa fa-clock me-1"></i>
+                                                    1 day
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item border-radius-md" href="javascript:;">
+                                        <div class="d-flex py-1">
+                                            <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+                                                <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <title>credit-card</title>
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                                            <g transform="translate(1716.000000, 291.000000)">
+                                                                <g transform="translate(453.000000, 454.000000)">
+                                                                    <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+                                                                    <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="text-sm font-weight-normal mb-1">
+                                                    Payment successfully completed
+                                                </h6>
+                                                <p class="text-xs text-secondary mb-0">
+                                                    <i class="fa fa-clock me-1"></i>
+                                                    2 days
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- top bar end -->
+
+        <!-- content 부분 -->
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                                <h6 class="text-white text-capitalize ps-3">코로나 확진자/사망자 연도 및 월별 조회</h6>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="row px-5">
+                                <div id="year_select" class="canvas">
+                                    <select class="custom-select col-md-4 mb-3 mt-3 mx-4" name="year" id="year">
+                                        <option selected>년도를 선택해주세요</option>
+                                        <option value="2020">2020년</option>
+                                        <option value="2021">2021년</option>
+                                        <option value="2022">2022년</option>
+                                    </select>
+                                    <select class="custom-select col-md-4 mb-3 mt-3 mx-4" name="month" id="month">
+                                        <option selected>월을 선택해주세요</option>
+                                        <option value="01">1월</option>
+                                        <option value="02">2월</option>
+                                        <option value="03">3월</option>
+                                        <option value="04">4월</option>
+                                        <option value="05">5월</option>
+                                        <option value="06">6월</option>
+                                        <option value="07">7월</option>
+                                        <option value="08">8월</option>
+                                        <option value="09">9월</option>
+                                        <option value="10">10월</option>
+                                        <option value="11">11월</option>
+                                        <option value="12">12월</option>
+                                    </select>
+                                    <button type="button" class="btn btn-secondary col-md-2 mb-3 mt-3 mx-4" id="search" name="search">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <div id="canvas_Chart1">
+                                    <h5 class="fw-bold">확진자 수</h5>
+                                    <canvas id="myChart1" width="80%" height="20%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <div id="canvas_Chart2">
+                                    <h5 class="fw-bold">사망자 수</h5>
+                                    <canvas id="myChart2" width="80%" height="20%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- footer start -->
+            <footer class="footer py-4  ">
+                <div class="container-fluid">
+                    <div class="row align-items-center justify-content-lg-between">
+                        <div class="col-lg-4 mb-lg-0 mb-4">
+                            <div class="copyright text-center text-sm text-muted text-lg-start">
+                                © <script>
+                                document.write(new Date().getFullYear())
+                            </script>,
+                                made with <i class="fa fa-heart"></i> by
+                                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
+                                for a better web.
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                                <li class="nav-item">
+                                    <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Distributed By: ThemeWagon</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3">
+                            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                                <li class="nav-item">
+                                    <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- footer end -->
+        </div>
+    </main>
+    <script>
+        const decide_cnt = [];
+        const state_dt = [];
+        const death_cnt = [];
+
+        let year = "";
+        let month = "";
+        let min_day = "";
+        let max_day = "";
+        let data_label1 = "";
+        let data_label2 = "";
+
+        $(document).ready(function (){
+
+            $.ajax({
+                url : "/chart/covidState",
+                type : "GET",
+                dataType : "text",
+                success : function (data) {
+
+                    console.log($(data).find("item"));
+
+                    let datas = $(data).find("item");
+                    let j = 0;
+
+                    for (let i = datas.length - 1; i >= 0; i--){
+                        decide_cnt[j] = $(datas[i]).find("decidecnt").text();
+                        state_dt[j] = $(datas[i]).find("statedt").text();
+                        death_cnt[j] = $(datas[i]).find("deathcnt").text();
+
+                        j++;
+                    }
+
+                    chartDraws(state_dt, decide_cnt);
+
+                    chartDrawd(state_dt, death_cnt);
+                }
+            });
+        });
+
+        function chartDraws(state_dt, decide_cnt) {
+            var canvas1 = document.getElementById("myChart1");
+            var context1 = canvas1.getContext("2d");
+
+            // 픽셀정리
+            context1.clearRect(0, 0, canvas1.width, canvas1.height);
+            // 컨텍스트 리셋
+            context1.beginPath();
+
+            const myChart1 = new Chart(context1, {
+                type: "line",
+                data : {
+                    labels : state_dt,
+                    datasets : [{
+                        label : "최근 코로나 확진자 수",
+                        data : decide_cnt,
+                        fill : false,
+                        borderColor : 'rgba(141,221,232,0.7)',
+                        backgroundColor :  'rgba(134,214,229,0.7)',
+                        pointStyle : "circle",
+                        pointRadius : 7,
+                        pointHoverRadius : 8,
+                        tension : 0.1,
+                        stack : 'combined'
+                    }]
+                }
+            });
+        }
+
+        function chartDrawd(state_dt, death_cnt) {
+            var canvas2= document.getElementById("myChart2");
+            var context2 = canvas2.getContext("2d");
+
+            context2.clearRect(0, 0, canvas2.width, canvas2.height);
+            context2.beginPath();
+
+            const myChart2 = new Chart(context2, {
+                type: "line",
+                data : {
+                    labels : state_dt,
+                    datasets : [{
+                        label : "최근 코로나 사망자 수",
+                        data : death_cnt,
+                        fill : false,
+                        borderColor : 'rgba(59,58,58,0.7)',
+                        backgroundColor :  'rgba(59,58,58,0.7)',
+                        pointStyle : "circle",
+                        pointRadius : 7,
+                        pointHoverRadius : 8,
+                        tension : 0.1,
+                        stack : 'combined'
+                    }]
+                }
+            });
+        }
+
+        $("#search").on("click", function (){
+            year = $("#year option:selected").val();
+            month = $("#month option:selected").val();
+            min_day = "";
+            max_day = "";
+
+            if (month === "01" || month === "03" || month === "05" || month === "07"
+                || month === "08" || month === "10" || month === "12") {
+                min_day = "01";
+                max_day = "31";
+
+                chartData(year, month, min_day, max_day);
+            } else if (month === "04" || month === "06" || month === "09" || month === "11"){
+                min_day = "01";
+                max_day = "30";
+
+                chartData(year, month, min_day, max_day);
+            } else {
+                min_day = "01";
+                max_day = "28";
+
+                chartData(year, month, min_day, max_day);
+            }
+        });
+
+        function chartData(year, month, min_day, max_day){
+            $.ajax({
+                url : "/chart/covidYmState",
+                type : "GET",
+                data : {
+                    year : year,
+                    month : month,
+                    min_day : min_day,
+                    max_day: max_day
+                },
+                dataType: "text",
+                success : function(data) {
+
+                    let data1 = $(data).find("item");
+                    let j = 0;
+
+                    decide_cnt.splice(0, decide_cnt.length);
+                    state_dt.splice(0, state_dt.length);
+
+                    for (let i = data1.length - 1; i >= 0; i--){
+                        decide_cnt[j] = $(data1[i]).find("decidecnt").text();
+                        state_dt[j] = $(data1[i]).find("statedt").text();
+                        death_cnt[j] = $(data1[i]).find("deathcnt").text();
+
+                        j++;
+                    }
+
+                    if (year==="2020" && month==="03"){
+                        data_label1 = "2020년 3월 확진자 수";
+                        data_label2 = "2020년 3월 사망자 수";
+                    } else if (year==="2020" && month==="04"){
+                        data_label1 = "2020년 4월 확진자 수";
+                        data_label2 = "2020년 4월 사망자 수";
+                    } else if (year==="2020" && month==="05"){
+                        data_label1 = "2020년 5월 확진자 수";
+                        data_label2 = "2020년 5월 사망자 수";
+                    } else if (year==="2020" && month==="06"){
+                        data_label1 = "2020년 6월 확진자 수";
+                        data_label2 = "2020년 6월 사망자 수";
+                    } else if (year==="2020" && month==="07"){
+                        data_label1 = "2020년 7월 확진자 수";
+                        data_label2 = "2020년 7월 사망자 수";
+                    } else if (year==="2020" && month==="08"){
+                        data_label1 = "2020년 8월 확진자 수";
+                        data_label2 = "2020년 8월 사망자 수";
+                    } else if (year==="2020" && month==="09"){
+                        data_label1 = "2020년 9월 확진자 수";
+                        data_label2 = "2020년 9월 사망자 수";
+                    } else if (year==="2020" && month==="10"){
+                        data_label1 = "2020년 10월 확진자 수";
+                        data_label2 = "2020년 10월 사망자 수";
+                    } else if (year==="2020" && month==="11"){
+                        data_label1 = "2020년 11월 확진자 수";
+                        data_label2 = "2020년 11월 사망자 수";
+                    } else if (year==="2020" && month==="12"){
+                        data_label1 = "2020년 12월 확진자 수";
+                        data_label2 = "2020년 12월 사망자 수";
+                    } else if (year==="2021" && month==="01"){
+                        data_label1 = "2021년 1월 확진자 수";
+                        data_label2 = "2021년 1월 사망자 수";
+                    } else if (year==="2021" && month==="02"){
+                        data_label1 = "2021년 2월 확진자 수";
+                        data_label2 = "2021년 2월 사망자 수";
+                    } else if (year==="2021" && month==="03"){
+                        data_label1 = "2021년 3월 확진자 수";
+                        data_label2 = "2021년 3월 사망자 수";
+                    } else if (year==="2021" && month==="04"){
+                        data_label1 = "2021년 4월 확진자 수";
+                        data_label2 = "2021년 4월 사망자 수";
+                    } else if (year==="2021" && month==="05"){
+                        data_label1 = "2021년 5월 확진자 수";
+                        data_label2 = "2021년 5월 사망자 수";
+                    } else if (year==="2021" && month==="06"){
+                        data_label1 = "2021년 6월 확진자 수";
+                        data_label2 = "2021년 6월 사망자 수";
+                    } else if (year==="2021" && month==="07"){
+                        data_label1 = "2021년 7월 확진자 수";
+                        data_label2 = "2021년 7월 사망자 수";
+                    } else if (year==="2021" && month==="08"){
+                        data_label1 = "2021년 8월 확진자 수";
+                        data_label2 = "2021년 8월 사망자 수";
+                    } else if (year==="2021" && month==="09"){
+                        data_label1 = "2021년 9월 확진자 수";
+                        data_label2 = "2021년 9월 사망자 수";
+                    } else if (year==="2021" && month==="10"){
+                        data_label1 = "2021년 10월 확진자 수";
+                        data_label2 = "2021년 10월 사망자 수";
+                    } else if (year==="2021" && month==="11"){
+                        data_label1 = "2021년 11월 확진자 수";
+                        data_label2 = "2021년 11월 사망자 수";
+                    } else if (year==="2021" && month==="12"){
+                        data_label1 = "2021년 12월 확진자 수";
+                        data_label2 = "2021년 12월 사망자 수";
+                    } else if (year==="2022" && month==="01"){
+                        data_label1 = "2022년 1월 확진자 수";
+                        data_label2 = "2022년 1월 사망자 수";
+                    } else if (year==="2022" && month==="02"){
+                        data_label1 = "2022년 2월 확진자 수";
+                        data_label2 = "2022년 2월 사망자 수";
+                    } else if (year==="2022" && month==="03"){
+                        data_label1 = "2022년 3월 확진자 수";
+                        data_label2 = "2022년 3월 사망자 수";
+                    } else if (year==="2022" && month==="04") {
+                        data_label1 = "2022년 4월 확진자 수";
+                        data_label2 = "2022년 4월 사망자 수";
+                    }
+
+                    chartDraw1(state_dt, decide_cnt, data_label1);
+                    chartDraw2(state_dt, death_cnt, data_label2);
+                }
+            })
+        }
+
+        function chartDraw1(state_dt, decide_cnt, data_label1) {
+
+            $("#myChart1").remove();
+            $("#canvas_Chart1").append('<canvas id="myChart1" width="80%" height="20%"></canvas>');
+
+            let canvas1 = document.getElementById("myChart1");
+            let context1 = canvas1.getContext("2d");
+
+            const myChart1 = new Chart(context1, {
+                type: "line",
+                data : {
+                    labels : state_dt,
+                    datasets : [{
+                        label : data_label1,
+                        data : decide_cnt,
+                        fill : false,
+                        borderColor : 'rgba(141,221,232,0.7)',
+                        backgroundColor :  'rgba(134,214,229,0.7)',
+                        pointStyle : "circle",
+                        pointRadius : 7,
+                        pointHoverRadius : 8,
+                        tension : 0.1,
+                        stack : 'combined'
+                    }]
+                }
+            });
+        }
+
+        function chartDraw2(state_dt, death_cnt, data_label2) {
+
+            $("#myChart2").remove();
+            $("#canvas_Chart2").append('<canvas id="myChart2" width="80%" height="20%"></canvas>');
+
+            let canvas2= document.getElementById("myChart2");
+            let context2 = canvas2.getContext("2d");
+
+            const myChart2 = new Chart(context2, {
+                type: "line",
+                data : {
+                    labels : state_dt,
+                    datasets : [{
+                        label : data_label2,
+                        data : death_cnt,
+                        fill : false,
+                        borderColor : 'rgba(59,58,58,0.7)',
+                        backgroundColor :  'rgba(59,58,58,0.7)',
+                        pointStyle : "circle",
+                        pointRadius : 7,
+                        pointHoverRadius : 8,
+                        tension : 0.1,
+                        stack : 'combined'
+                    }]
+                }
+            });
+        }
+    </script>
+</th:block>
+</html>
