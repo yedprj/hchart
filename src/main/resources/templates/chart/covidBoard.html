@@ -3,11 +3,12 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
-
 <th:block layout:fragment="content">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <link th:href="@{/css/canvas.css}" rel="stylesheet" />
-
+    <style>
+        th {
+            height: 70px;
+        }
+    </style>
     <!-- navBar start -->
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
         <div class="sidenav-header">
@@ -33,11 +34,11 @@
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">table_view</i>
                         </div>
-                        <span class="nav-link-text ms-1">코로나 최근 현황</span>
+                        <span class="nav-link-text ms-1">코로나 현황</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white active bg-gradient-primary" th:href="@{/chart/covidYmChart}">
+                    <a class="nav-link text-white " th:href="@{/chart/covidYmChart}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">view_in_ar</i>
                         </div>
@@ -53,7 +54,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/chart/covidBoard}">
+                    <a class="nav-link text-white active bg-gradient-primary" th:href="@{/chart/covidBoard}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
                         </div>
@@ -107,9 +108,9 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page" id="page1">코로나 연도 및 월별 조회</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page" id="page1">코로나19 게시판</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0" id="page2">코로나 연도 및 월별 조회</h6>
+                    <h6 class="font-weight-bolder mb-0" id="page2">코로나19 게시판</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -218,59 +219,77 @@
         </nav>
         <!-- top bar end -->
 
-        <!-- content 부분 -->
         <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card my-4">
-                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                <h6 class="text-white text-capitalize ps-3">코로나 확진자/사망자 연도 및 월별 조회</h6>
-                            </div>
-                        </div>
-                        <div class="card-body px-0 pb-2">
-                            <div class="row px-5">
-                                <div id="year_select" class="canvas">
-                                    <select class="custom-select col-md-4 mb-3 mt-3 mx-4" name="year" id="year">
-                                        <option selected>년도를 선택해주세요</option>
-                                        <option value="2020">2020년</option>
-                                        <option value="2021">2021년</option>
-                                        <option value="2022">2022년</option>
-                                    </select>
-                                    <select class="custom-select col-md-4 mb-3 mt-3 mx-4" name="month" id="month">
-                                        <option selected>월을 선택해주세요</option>
-                                        <option value="01">1월</option>
-                                        <option value="02">2월</option>
-                                        <option value="03">3월</option>
-                                        <option value="04">4월</option>
-                                        <option value="05">5월</option>
-                                        <option value="06">6월</option>
-                                        <option value="07">7월</option>
-                                        <option value="08">8월</option>
-                                        <option value="09">9월</option>
-                                        <option value="10">10월</option>
-                                        <option value="11">11월</option>
-                                        <option value="12">12월</option>
-                                    </select>
-                                    <button type="button" class="btn btn-secondary col-md-2 mb-3 mt-3 mx-4" id="search" name="search">검색</button>
+            <div class="row mb-4">
+                <div class="col-lg-12 col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <div class="row">
+                                <div class="col-lg-12 col-12">
+                                    <h3 class="mt-4">게시판
+                                        <span style="float: right">
+                                            <a th:href="@{/chart/register}" >
+                                                <button type="button" class="btn btn-outline-primary">게시판 등록</button>
+                                            </a>
+                                        </span>
+                                    </h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body px-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <div id="canvas_Chart1">
-                                    <h5 class="fw-bold">확진자 수</h5>
-                                    <canvas id="myChart1" width="80%" height="20%"></canvas>
+                        <div class="card-body px-5 pb-5">
+                            <div class="card">
+                                <div class="table-responsive">
+                                    <table class="table table-striped align-items-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder">No</th>
+                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder ps-2">제목</th>
+                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder ps-2">작성자</th>
+                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder ps-2">작성일</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="dto : ${result.dtoList}" class="my-3">
+                                                <th class="px-3">
+                                                    <a th:href="@{/chart/read(no = ${dto.no}, page = ${result.page})}">
+                                                        [[${dto.no}]]
+                                                    </a>
+                                                </th>
+                                                <th>[[${dto.title}]]</th>
+                                                <th>[[${dto.writer}]]</th>
+                                                <th>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        </div>
-                        <br><br>
-                        <div class="card-body px-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <div id="canvas_Chart2">
-                                    <h5 class="fw-bold">사망자 수</h5>
-                                    <canvas id="myChart2" width="80%" height="20%"></canvas>
-                                </div>
+                            <div class="mt-3">
+                                <ul class="pagination pagination-lg h-100 justify-content-center align-items-center">
+                                    <li class="page-item" th:if="${result.prev}">
+                                        <a class="page-link" th:href="@{/chart/covidBoard(page = ${result.start -1})}" tabindex="-1">
+                                            <span class="material-icons">
+                                                keyboard_arrow_left
+                                            </span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+
+                                    <li th:class=" 'page-item ' + ${result.page == page?'active':''} "
+                                        th:each="page: ${result.pageList}">
+                                        <a class="page-link" th:href="@{/chart/covidBoard(page = ${page})}">
+                                            [[${page}]]
+                                        </a>
+                                    </li>
+
+                                    <li class="page-item" th:if="${result.next}">
+                                        <a class="page-link" th:href="@{/chart/covidBoard(page = ${result.end +1})}">
+                                            <span class="material-icons">
+                                                keyboard_arrow_right
+                                            </span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -319,295 +338,35 @@
             </footer>
             <!-- footer end -->
         </div>
+        <!-- Modal -->
+        <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-normal">Modal title</h5>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn bg-gradient-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
-    <script>
-        const decide_cnt = [];
-        const state_dt = [];
-        const death_cnt = [];
 
-        let year = "";
-        let month = "";
-        let min_day = "";
-        let max_day = "";
-        let data_label1 = "";
-        let data_label2 = "";
+    <script th:inline="javascript">
+        let msg = [[${msg}]]
 
-        $(document).ready(function (){
+        console.log(msg);
 
-            $.ajax({
-                url : "/chart/covidState",
-                type : "GET",
-                dataType : "text",
-                success : function (data) {
-
-                    console.log($(data).find("item"));
-
-                    let datas = $(data).find("item");
-                    let j = 0;
-
-                    for (let i = datas.length - 1; i >= 0; i--){
-                        decide_cnt[j] = $(datas[i]).find("decidecnt").text();
-                        state_dt[j] = $(datas[i]).find("statedt").text();
-                        death_cnt[j] = $(datas[i]).find("deathcnt").text();
-
-                        j++;
-                    }
-
-                    chartDraws(state_dt, decide_cnt);
-
-                    chartDrawd(state_dt, death_cnt);
-                }
-            });
-        });
-
-        function chartDraws(state_dt, decide_cnt) {
-            var canvas1 = document.getElementById("myChart1");
-            var context1 = canvas1.getContext("2d");
-
-            // 픽셀정리
-            context1.clearRect(0, 0, canvas1.width, canvas1.height);
-            // 컨텍스트 리셋
-            context1.beginPath();
-
-            const myChart1 = new Chart(context1, {
-                type: "line",
-                data : {
-                    labels : state_dt,
-                    datasets : [{
-                        label : "최근 코로나 확진자 수",
-                        data : decide_cnt,
-                        fill : false,
-                        borderColor : 'rgba(141,221,232,0.7)',
-                        backgroundColor :  'rgba(134,214,229,0.7)',
-                        pointStyle : "circle",
-                        pointRadius : 7,
-                        pointHoverRadius : 8,
-                        tension : 0.1,
-                        stack : 'combined'
-                    }]
-                }
-            });
-        }
-
-        function chartDrawd(state_dt, death_cnt) {
-            var canvas2= document.getElementById("myChart2");
-            var context2 = canvas2.getContext("2d");
-
-            context2.clearRect(0, 0, canvas2.width, canvas2.height);
-            context2.beginPath();
-
-            const myChart2 = new Chart(context2, {
-                type: "line",
-                data : {
-                    labels : state_dt,
-                    datasets : [{
-                        label : "최근 코로나 사망자 수",
-                        data : death_cnt,
-                        fill : false,
-                        borderColor : 'rgba(59,58,58,0.7)',
-                        backgroundColor :  'rgba(59,58,58,0.7)',
-                        pointStyle : "circle",
-                        pointRadius : 7,
-                        pointHoverRadius : 8,
-                        tension : 0.1,
-                        stack : 'combined'
-                    }]
-                }
-            });
-        }
-
-        $("#search").on("click", function (){
-            year = $("#year option:selected").val();
-            month = $("#month option:selected").val();
-            min_day = "";
-            max_day = "";
-
-            if (month === "01" || month === "03" || month === "05" || month === "07"
-                || month === "08" || month === "10" || month === "12") {
-                min_day = "01";
-                max_day = "31";
-
-                chartData(year, month, min_day, max_day);
-            } else if (month === "04" || month === "06" || month === "09" || month === "11"){
-                min_day = "01";
-                max_day = "30";
-
-                chartData(year, month, min_day, max_day);
-            } else {
-                min_day = "01";
-                max_day = "28";
-
-                chartData(year, month, min_day, max_day);
-            }
-        });
-
-        function chartData(year, month, min_day, max_day){
-            $.ajax({
-                url : "/chart/covidYmState",
-                type : "GET",
-                data : {
-                    year : year,
-                    month : month,
-                    min_day : min_day,
-                    max_day: max_day
-                },
-                dataType: "text",
-                success : function(data) {
-
-                    let data1 = $(data).find("item");
-                    let j = 0;
-
-                    decide_cnt.splice(0, decide_cnt.length);
-                    state_dt.splice(0, state_dt.length);
-
-                    for (let i = data1.length - 1; i >= 0; i--){
-                        decide_cnt[j] = $(data1[i]).find("decidecnt").text();
-                        state_dt[j] = $(data1[i]).find("statedt").text();
-                        death_cnt[j] = $(data1[i]).find("deathcnt").text();
-
-                        j++;
-                    }
-
-                    if (year==="2020" && month==="03"){
-                        data_label1 = "2020년 3월 확진자 수";
-                        data_label2 = "2020년 3월 사망자 수";
-                    } else if (year==="2020" && month==="04"){
-                        data_label1 = "2020년 4월 확진자 수";
-                        data_label2 = "2020년 4월 사망자 수";
-                    } else if (year==="2020" && month==="05"){
-                        data_label1 = "2020년 5월 확진자 수";
-                        data_label2 = "2020년 5월 사망자 수";
-                    } else if (year==="2020" && month==="06"){
-                        data_label1 = "2020년 6월 확진자 수";
-                        data_label2 = "2020년 6월 사망자 수";
-                    } else if (year==="2020" && month==="07"){
-                        data_label1 = "2020년 7월 확진자 수";
-                        data_label2 = "2020년 7월 사망자 수";
-                    } else if (year==="2020" && month==="08"){
-                        data_label1 = "2020년 8월 확진자 수";
-                        data_label2 = "2020년 8월 사망자 수";
-                    } else if (year==="2020" && month==="09"){
-                        data_label1 = "2020년 9월 확진자 수";
-                        data_label2 = "2020년 9월 사망자 수";
-                    } else if (year==="2020" && month==="10"){
-                        data_label1 = "2020년 10월 확진자 수";
-                        data_label2 = "2020년 10월 사망자 수";
-                    } else if (year==="2020" && month==="11"){
-                        data_label1 = "2020년 11월 확진자 수";
-                        data_label2 = "2020년 11월 사망자 수";
-                    } else if (year==="2020" && month==="12"){
-                        data_label1 = "2020년 12월 확진자 수";
-                        data_label2 = "2020년 12월 사망자 수";
-                    } else if (year==="2021" && month==="01"){
-                        data_label1 = "2021년 1월 확진자 수";
-                        data_label2 = "2021년 1월 사망자 수";
-                    } else if (year==="2021" && month==="02"){
-                        data_label1 = "2021년 2월 확진자 수";
-                        data_label2 = "2021년 2월 사망자 수";
-                    } else if (year==="2021" && month==="03"){
-                        data_label1 = "2021년 3월 확진자 수";
-                        data_label2 = "2021년 3월 사망자 수";
-                    } else if (year==="2021" && month==="04"){
-                        data_label1 = "2021년 4월 확진자 수";
-                        data_label2 = "2021년 4월 사망자 수";
-                    } else if (year==="2021" && month==="05"){
-                        data_label1 = "2021년 5월 확진자 수";
-                        data_label2 = "2021년 5월 사망자 수";
-                    } else if (year==="2021" && month==="06"){
-                        data_label1 = "2021년 6월 확진자 수";
-                        data_label2 = "2021년 6월 사망자 수";
-                    } else if (year==="2021" && month==="07"){
-                        data_label1 = "2021년 7월 확진자 수";
-                        data_label2 = "2021년 7월 사망자 수";
-                    } else if (year==="2021" && month==="08"){
-                        data_label1 = "2021년 8월 확진자 수";
-                        data_label2 = "2021년 8월 사망자 수";
-                    } else if (year==="2021" && month==="09"){
-                        data_label1 = "2021년 9월 확진자 수";
-                        data_label2 = "2021년 9월 사망자 수";
-                    } else if (year==="2021" && month==="10"){
-                        data_label1 = "2021년 10월 확진자 수";
-                        data_label2 = "2021년 10월 사망자 수";
-                    } else if (year==="2021" && month==="11"){
-                        data_label1 = "2021년 11월 확진자 수";
-                        data_label2 = "2021년 11월 사망자 수";
-                    } else if (year==="2021" && month==="12"){
-                        data_label1 = "2021년 12월 확진자 수";
-                        data_label2 = "2021년 12월 사망자 수";
-                    } else if (year==="2022" && month==="01"){
-                        data_label1 = "2022년 1월 확진자 수";
-                        data_label2 = "2022년 1월 사망자 수";
-                    } else if (year==="2022" && month==="02"){
-                        data_label1 = "2022년 2월 확진자 수";
-                        data_label2 = "2022년 2월 사망자 수";
-                    } else if (year==="2022" && month==="03"){
-                        data_label1 = "2022년 3월 확진자 수";
-                        data_label2 = "2022년 3월 사망자 수";
-                    } else if (year==="2022" && month==="04") {
-                        data_label1 = "2022년 4월 확진자 수";
-                        data_label2 = "2022년 4월 사망자 수";
-                    }
-
-                    chartDraw1(state_dt, decide_cnt, data_label1);
-                    chartDraw2(state_dt, death_cnt, data_label2);
-                }
-            })
-        }
-
-        function chartDraw1(state_dt, decide_cnt, data_label1) {
-
-            $("#myChart1").remove();
-            $("#canvas_Chart1").append('<canvas id="myChart1" width="80%" height="20%"></canvas>');
-
-            let canvas1 = document.getElementById("myChart1");
-            let context1 = canvas1.getContext("2d");
-
-            const myChart1 = new Chart(context1, {
-                type: "line",
-                data : {
-                    labels : state_dt,
-                    datasets : [{
-                        label : data_label1,
-                        data : decide_cnt,
-                        fill : false,
-                        borderColor : 'rgba(141,221,232,0.7)',
-                        backgroundColor :  'rgba(134,214,229,0.7)',
-                        pointStyle : "circle",
-                        pointRadius : 7,
-                        pointHoverRadius : 8,
-                        tension : 0.1,
-                        stack : 'combined'
-                    }]
-                }
-            });
-        }
-
-        function chartDraw2(state_dt, death_cnt, data_label2) {
-
-            $("#myChart2").remove();
-            $("#canvas_Chart2").append('<canvas id="myChart2" width="80%" height="20%"></canvas>');
-
-            let canvas2= document.getElementById("myChart2");
-            let context2 = canvas2.getContext("2d");
-
-            const myChart2 = new Chart(context2, {
-                type: "line",
-                data : {
-                    labels : state_dt,
-                    datasets : [{
-                        label : data_label2,
-                        data : death_cnt,
-                        fill : false,
-                        borderColor : 'rgba(59,58,58,0.7)',
-                        backgroundColor :  'rgba(59,58,58,0.7)',
-                        pointStyle : "circle",
-                        pointRadius : 7,
-                        pointHoverRadius : 8,
-                        tension : 0.1,
-                        stack : 'combined'
-                    }]
-                }
-            });
+        if (msg) {
+            $(".modal").modal();
         }
     </script>
 </th:block>

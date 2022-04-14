@@ -1,23 +1,30 @@
 package com.samin.hchart.controller;
 
+import com.samin.hchart.dto.CovidBoardDTO;
+import com.samin.hchart.dto.PageRequestDTO;
+import com.samin.hchart.service.CovidBoardService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequestMapping(value = "/chart")
+@Log4j2
+@RequiredArgsConstructor    // 자동 주입을 위한 Annotation
 public class ChartController {
+
+    private final CovidBoardService service;
 
     @GetMapping("/covidChart")
     public String covidCahrt() {
@@ -32,6 +39,54 @@ public class ChartController {
     @GetMapping("/covidYmChart")
     public String covidYmChart() {
         return "chart/covidYmChart";
+    }
+
+    @GetMapping("/covidBoard")
+    public String covidBoard(PageRequestDTO pageRequestDTO, Model model) {
+
+        log.info("list......................." + pageRequestDTO);
+
+        model.addAttribute("result", service.getList(pageRequestDTO));
+
+        return "chart/covidBoard";
+    }
+
+    @GetMapping("/register")
+    public void register(){
+        log.info("register get.....");
+    }
+
+    @PostMapping("/register")
+    public String registerPost(CovidBoardDTO dto, RedirectAttributes redirectAttributes) {
+
+        log.info("dto..." + dto);
+
+        // 새로 추가된 엔티티의 번호
+        Long no = service.register(dto);
+
+        redirectAttributes.addFlashAttribute("msg", no);
+
+        return "redirect:/chart/covidBoard";
+    }
+
+    @GetMapping({"/read", "/modify"})
+    public void read(long no, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model) {
+        log.info("no: " + no);
+        CovidBoardDTO dto = service.read(no);
+        model.addAttribute("dto", dto);
+    }
+
+    @PostMapping("/remove")
+    public String remove(long no, RedirectAttributes redirectAttributes) {
+
+        log.info("no: " + no);
+
+        service.remove(no);
+
+        redirectAttributes.addFlashAttribute("msg", no);
+
+        return "redirect:/chart/covidBoard";
+
     }
 
     @RequestMapping(value = "/covidState", method = RequestMethod.GET, produces = "application/text; charset=utf8")
