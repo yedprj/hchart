@@ -1,9 +1,7 @@
 package com.samin.hchart.repository;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.samin.hchart.entity.CovidBoard;
-import com.samin.hchart.entity.QCovidBoard;
+import com.samin.hchart.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -22,83 +22,75 @@ public class CovidBoardRepositoryTests {
     private CovidBoardRepository covidBoardRepository;
 
     @Test
-    public void insertDummies() {
+    public void insertCovidBoard() {
 
         IntStream.rangeClosed(1, 100).forEach(i -> {
 
+            Member member = Member.builder().email("user"+i+"@samin.com").build();
+
             CovidBoard covidBoard = CovidBoard.builder()
-                    .title("게시판 TEST....." + i)
-                    .content("게시판 TEST 내용부분....." + i)
-                    .writer("user" + (i % 10))
+                    .title("Test Title....." + i)
+                    .content("Test Content....." + i)
+                    .writer(member)
                     .build();
 
-            System.out.println(covidBoardRepository.save(covidBoard));
+            covidBoardRepository.save(covidBoard);
         });
     }
 
     @Test
-    public void updateTest() {
+    public void testRead1() {
 
         Optional<CovidBoard> result = covidBoardRepository.findById(100L);
 
-        if(result.isPresent()) {
+        CovidBoard covidBoard = result.get();
 
-            CovidBoard covidBoard = result.get();
+        System.out.println(covidBoard);
+        System.out.println(covidBoard.getWriter());
+    }
 
-            covidBoard.changeTitle("게시판 제목 변경 TEST.....");
-            covidBoard.changeContent("게시판 내용부분 변경 TEST.....");
+    @Test
+    public void testReadWithWriter() {
 
-            covidBoardRepository.save(covidBoard);
+        Object result = covidBoardRepository.getCovidBoardWithWriter(100L);
+
+        Object[] arr = (Object[]) result;
+
+        System.out.println("--------------------------------------------------");
+        System.out.println(Arrays.toString(arr));
+    }
+
+    @Test
+    public void testGetCovidBoardWithReply() {
+
+        List<Object[]> result = covidBoardRepository.getCovidBoardWithReply(100L);
+
+        for (Object[] arr : result) {
+            System.out.println(Arrays.toString(arr));
         }
     }
 
     @Test
-    public void testQuery1() {
+    public void testWithReplyCount() {
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("no").descending());
 
-        QCovidBoard qCovidBoard = QCovidBoard.covidBoard;
+        Page<Object[]> result = covidBoardRepository.getCovidBoardWithReplyCount(pageable);
 
-        String keyword = "1";
+        result.get().forEach(row -> {
+            Object[] arr = (Object[]) row;
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        BooleanExpression expression = qCovidBoard.title.contains(keyword);
-
-        builder.and(expression);
-
-        Page<CovidBoard> result = covidBoardRepository.findAll(builder, pageable);
-
-        result.stream().forEach(covidBoard -> {
-            System.out.println(covidBoard);
+            System.out.println(Arrays.toString(arr));
         });
     }
 
     @Test
-    public void testQuery2() {
+    public void testRead3() {
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("no").descending());
+        Object result = covidBoardRepository.getCovidBoardByNo(100L);
 
-        QCovidBoard qCovidBoard = QCovidBoard.covidBoard;
+        Object[] arr = (Object[]) result;
 
-        String keyword = "1";
-
-        BooleanBuilder builder = new BooleanBuilder();
-
-        BooleanExpression exTitle = qCovidBoard.title.contains(keyword);
-
-        BooleanExpression exContent = qCovidBoard.content.contains(keyword);
-
-        BooleanExpression exAll = exTitle.or(exContent);
-
-        builder.and(exAll);
-
-        builder.and(qCovidBoard.no.gt(0L));
-
-        Page<CovidBoard> result = covidBoardRepository.findAll(builder, pageable);
-
-        result.stream().forEach(covidBoard -> {
-            System.out.println(covidBoard);
-        });
+        System.out.println(Arrays.toString(arr));
     }
 }

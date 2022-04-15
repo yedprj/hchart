@@ -4,44 +4,51 @@ import com.samin.hchart.dto.CovidBoardDTO;
 import com.samin.hchart.dto.PageRequestDTO;
 import com.samin.hchart.dto.PageResultDTO;
 import com.samin.hchart.entity.CovidBoard;
+import com.samin.hchart.entity.Member;
 
 public interface CovidBoardService {
 
     Long register(CovidBoardDTO dto);
 
-    // 게시판 조회
-    CovidBoardDTO read(Long no);
+    PageResultDTO<CovidBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
 
-    // 게시글 삭제
-    void remove(Long no);
+    // 게시물 조회
+    CovidBoardDTO get(Long no);
+
+    // 게시물 삭제
+    void removeWithReplies(Long no);
 
     // 게시글 수정
-    void modify(CovidBoardDTO dto);
+    void modify(CovidBoardDTO covidBoardDTO);
 
-    PageResultDTO<CovidBoardDTO, CovidBoard> getList(PageRequestDTO requestDTO);
 
     default CovidBoard dtoToEntity(CovidBoardDTO dto) {
-        CovidBoard entity = CovidBoard.builder()
+
+        Member member = Member.builder().email(dto.getWriterEmail()).build();
+
+        CovidBoard covidBoard = CovidBoard.builder()
                 .no(dto.getNo())
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .writer(dto.getWriter())
+                .writer(member)
                 .build();
 
-        return entity;
+        return covidBoard;
     }
 
-    default CovidBoardDTO entityToDto(CovidBoard entity) {
+    default CovidBoardDTO entityToDTO(CovidBoard covidBoard, Member member, Long replyCount){
 
-        CovidBoardDTO dto = CovidBoardDTO.builder()
-                .no(entity.getNo())
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .writer(entity.getWriter())
-                .regDate(entity.getRegDate())
-                .modDate(entity.getModDate())
+        CovidBoardDTO covidBoardDTO = CovidBoardDTO.builder()
+                .no(covidBoard.getNo())
+                .title(covidBoard.getTitle())
+                .content(covidBoard.getContent())
+                .regDate(covidBoard.getRegDate())
+                .modDate(covidBoard.getModDate())
+                .writerEmail(member.getEmail())
+                .writerName(member.getName())
+                .replyCount(replyCount.intValue())
                 .build();
 
-        return dto;
+        return covidBoardDTO;
     }
 }

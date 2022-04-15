@@ -244,21 +244,21 @@
                             <div class="form-group mt-4">
                                 <label>작성자</label>
                                 <div class="input-group input-group-lg input-group-outline">
-                                    <input type="text" class="form-control form-control-lg bg-light" name="writer" th:value="${dto.writer}" readonly>
+                                    <input type="text" class="form-control form-control-lg bg-light" name="writer" th:value="${dto.writerName}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group mt-4">
                                 <label>작성일</label>
                                 <div class="input-group input-group-lg input-group-outline">
-                                    <input type="text" class="form-control form-control-lg bg-light" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                    <input type="text" class="form-control form-control-lg bg-light" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group mt-4">
                                 <label>수정일</label>
                                 <div class="input-group input-group-lg input-group-outline">
-                                    <input type="text" class="form-control form-control-lg bg-light" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                    <input type="text" class="form-control form-control-lg bg-light" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
                                 </div>
                             </div>
 
@@ -270,11 +270,11 @@
                             </div>
 
                             <div class="mt-4 mx-2">
-                                <a th:href="@{/chart/modify(no = ${dto.no}, page=${requestDTO.page})}">
+                                <a th:href="@{/chart/modify(no = ${dto.no}, page=${requestDTO.page}, type=${requestDTO.type}, keyword=${requestDTO.keyword})}">
                                     <button type="button" class="btn btn-primary">게시글 수정</button>
                                 </a>
 
-                                <a th:href="@{/chart/covidBoard(page=${requestDTO.page})}">
+                                <a th:href="@{/chart/covidBoard(page=${requestDTO.page}, type=${requestDTO.type}, keyword=${requestDTO.keyword})}">
                                     <button type="button" class="btn btn-info">목록으로</button>
                                 </a>
                             </div>

@@ -1,32 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="scriptFragment">
+
         <!--   Core JS Files   -->
         <script th:src="@{/js/core/popper.min.js}"></script>
         <script th:src="@{/js/core/bootstrap.min.js}"></script>
         <script th:src="@{/js/plugins/perfect-scrollbar.min.js}"></script>
         <script th:src="@{/js/plugins/smooth-scrollbar.min.js}"></script>
         <script th:src="@{/js/plugins/chartjs.min.js}"></script>
-        <script>
-            $(document).ready(function (){
-                $("#home").on("click", function (){
-                    $("#page1").text("Home");
-                    $("#page2").text("Home");
-                });
 
-                $("#covidStatue").on("click", function (){
-                    $("#page1").empty().text("코로나 현황");
-                    $("#page2").empty().text("코로나 현황");
-                });
-            });
-
-
-        </script>
         <!-- Github buttons -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
         <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
         <script th:src="@{/js/material-dashboard.min.js}"></script>
-
 
     </th:block>
 </html>

@@ -227,7 +227,13 @@
                             </div>
                         </div>
                         <div class="card-body px-5 pb-5">
-                            <form th:action="@{chart/modify}" th:method="post" class="mb-4">
+                            <form th:action="@{/chart/modify}" th:method="post" class="mb-4">
+
+                                <!-- 페이지 번호 -->
+                                <input type="hidden" name="page" id="page" th:value="${requestDTO.page}">
+                                <input type="hidden" name="type" id="type" th:value="${requestDTO.type}">
+                                <input type="hidden" name="keyword" id="keyword" th:value="${requestDTO.keyword}">
+
                                 <div class="form-group">
                                     <label>No</label>
                                     <div class="input-group input-group-lg input-group-outline">
@@ -245,21 +251,21 @@
                                 <div class="form-group mt-4">
                                     <label>작성자</label>
                                     <div class="input-group input-group-lg input-group-outline">
-                                        <input type="text" class="form-control form-control-lg bg-light" name="writer" th:value="${dto.writer}" readonly>
+                                        <input type="text" class="form-control form-control-lg bg-light" name="writer" th:value="${dto.writerName}" readonly>
                                     </div>
                                 </div>
 
                                 <div class="form-group mt-4">
                                     <label>작성일</label>
                                     <div class="input-group input-group-lg input-group-outline">
-                                        <input type="text" class="form-control form-control-lg bg-light" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                        <input type="text" class="form-control form-control-lg bg-light" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
                                     </div>
                                 </div>
 
                                 <div class="form-group mt-4">
                                     <label>수정일</label>
                                     <div class="input-group input-group-lg input-group-outline">
-                                        <input type="text" class="form-control form-control-lg bg-light" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                        <input type="text" class="form-control form-control-lg bg-light" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
                                     </div>
                                 </div>
 
@@ -325,8 +331,46 @@
     <script th:inline="javascript">
         let actionForm = $("form");     // form 태그 객체
 
+        // 삭제 버튼 클릭 이벤트
         $(".removeBtn").click(function () {
+            actionForm
+                .attr("action", "/chart/remove")
+                .attr("method", "post");
 
+            actionForm.submit();
+        });
+
+        // 수정하기 버튼 클릭 이벤트
+        $(".modifyBtn").click(function (){
+
+            if(!confirm("수정하시겠습니까?")){
+                return ;
+            }
+
+            actionForm
+                .attr("action", "/chart/modify")
+                .attr("method", "post")
+                .submit();
+        });
+
+        // 리스트로 돌아가기 클릭 이벤트
+        $(".listBtn").click(function () {
+
+            let page = $("input[name = 'page']");
+            let type = $("input[name = 'type']");
+            let keyword = $("input[name = 'keyword']");
+
+            actionForm.empty(); // form 태그의 모든 내용을 지움
+            actionForm.append(page);    // 목록 페이지 이동에 필요한 내용 추가
+            actionForm.append(type);
+            actionForm.append(keyword);
+
+            actionForm
+                .attr("action", "/chart/covidBoard")
+                .attr("method", "get");
+
+            //console.log(actionForm.html());     // 확인
+            actionForm.submit();
         });
     </script>
 </th:block>

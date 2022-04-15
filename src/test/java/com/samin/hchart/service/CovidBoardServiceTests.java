@@ -3,46 +3,67 @@ package com.samin.hchart.service;
 import com.samin.hchart.dto.CovidBoardDTO;
 import com.samin.hchart.dto.PageRequestDTO;
 import com.samin.hchart.dto.PageResultDTO;
-import com.samin.hchart.entity.CovidBoard;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class CovidBoardServiceTests {
 
     @Autowired
-    private CovidBoardService service;
+    private CovidBoardService covidBoardService;
 
     @Test
     public void testRegister() {
 
-        CovidBoardDTO covidBoardDTO = CovidBoardDTO.builder()
-                .title("Sample Title.....")
-                .content("Sample Content.....")
-                .writer("user0")
+        CovidBoardDTO dto = CovidBoardDTO.builder()
+                .title("TEST..........")
+                .content("CONTENT TEST..........")
+                .writerEmail("user55@samin.com")
                 .build();
 
-        System.out.println(service.register(covidBoardDTO));
+        Long no = covidBoardService.register(dto);
     }
 
     @Test
     public void testList() {
 
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
 
-        PageResultDTO<CovidBoardDTO, CovidBoard> resultDTO = service.getList(pageRequestDTO);
+        PageResultDTO<CovidBoardDTO, Object[]> result = covidBoardService.getList(pageRequestDTO);
 
-        System.out.println("PREV: " + resultDTO.isPrev());
-        System.out.println("NEXT: " + resultDTO.isNext());
-        System.out.println("TOTAL: " + resultDTO.getTotalPage());
-
-        System.out.println("----------------------------------------------");
-        for (CovidBoardDTO covidBoardDTO : resultDTO.getDtoList()) {
+        for (CovidBoardDTO covidBoardDTO : result.getDtoList()) {
             System.out.println(covidBoardDTO);
         }
+    }
 
-        System.out.println("==================================================");
-        resultDTO.getPageList().forEach(i -> System.out.println(i));
+    @Test
+    public void testGet() {
+
+        Long no = 100L;
+
+        CovidBoardDTO covidBoardDTO = covidBoardService.get(no);
+
+        System.out.println(covidBoardDTO);
+    }
+
+    @Test
+    public void testRemove() {
+        Long no = 1L;
+
+        covidBoardService.removeWithReplies(no);
+    }
+
+    @Test
+    public void testModify() {
+
+        CovidBoardDTO covidBoardDTO = CovidBoardDTO.builder()
+                .no(100L)
+                .title("제목 변경합니다.")
+                .content("내용 변경합니다.")
+                .build();
+
+        covidBoardService.modify(covidBoardDTO);
     }
 }
