@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -45,5 +46,13 @@ public class ReplyRepositoryTests {
 
         System.out.println(reply);
         System.out.println(reply.getCovidBoard());
+    }
+
+    @Test
+    public void testListByBoard(){
+
+        List<Reply> replyList = replyRepository.getRepliesByCovidBoardOrderByRno(CovidBoard.builder().no(97L).build());
+
+        replyList.forEach(reply -> System.out.println(reply));
     }
 }

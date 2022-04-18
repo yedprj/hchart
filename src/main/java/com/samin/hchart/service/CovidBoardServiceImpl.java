@@ -43,7 +43,12 @@ public class CovidBoardServiceImpl implements CovidBoardService{
 
         Function<Object[], CovidBoardDTO> fn = (en -> entityToDTO((CovidBoard) en[0], (Member)en[1], (Long)en[2]));
 
-        Page<Object[]> result = repository.getCovidBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("no").descending()))
+       // Page<Object[]> result = repository.getCovidBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("no").descending()))
+
+        Page<Object[]> result = repository.searchPage(
+                pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+                pageRequestDTO.getPageable(Sort.by("no").descending()));
 ;
         return new PageResultDTO<>(result, fn);
     }

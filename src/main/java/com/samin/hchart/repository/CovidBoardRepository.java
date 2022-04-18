@@ -1,6 +1,7 @@
 package com.samin.hchart.repository;
 
 import com.samin.hchart.entity.CovidBoard;
+import com.samin.hchart.repository.search.SearchBoardRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CovidBoardRepository extends JpaRepository<CovidBoard, Long> {
+public interface CovidBoardRepository extends JpaRepository<CovidBoard, Long>, SearchBoardRepository {
 
     // 한개의 로우(object) 내에 Object[ ]로 나옴
     @Query("SELECT b, w FROM CovidBoard b LEFT JOIN b.writer w WHERE b.no =:no")

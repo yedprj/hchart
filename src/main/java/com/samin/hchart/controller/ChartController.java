@@ -28,7 +28,7 @@ public class ChartController {
     private final CovidBoardService covidBoardService;
 
     @GetMapping("/covidChart")
-    public String covidCahrt() {
+    public String covidChart() {
         return "chart/covidChart";
     }
 
