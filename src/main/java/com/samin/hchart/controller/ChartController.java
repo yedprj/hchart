@@ -2,7 +2,6 @@ package com.samin.hchart.controller;
 
 import com.samin.hchart.dto.CovidBoardDTO;
 import com.samin.hchart.dto.PageRequestDTO;
-import com.samin.hchart.entity.CovidBoard;
 import com.samin.hchart.service.CovidBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

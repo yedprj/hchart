@@ -112,9 +112,9 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page" id="page1">Home</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page" id="page1">대구광역시 북구 관광코스</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0" id="page2">Home</h6>
+                    <h6 class="font-weight-bolder mb-0" id="page2">대구광역시 북구 관광코스</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -237,7 +237,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body px-0 pb-2">
+                        <div class="card-body px-5 pb-5">
                             <div class="card">
                                 <div class="table-responsive">
                                     <table class="table table-striped align-items-center mb-0">
@@ -245,19 +245,14 @@
                                             <tr>
                                                 <th scope="col" class="text-uppercase text-secondary font-weight-bolder">관광코스명</th>
                                                 <th scope="col" class="text-uppercase text-secondary font-weight-bolder">코스거리</th>
-                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder">코스내 광광지</th>
                                                 <th scope="col" class="text-uppercase text-secondary font-weight-bolder">소요시간</th>
+                                                <th scope="col" class="text-uppercase text-secondary font-weight-bolder">코스내 광광지</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+
+                                        </tbody>
                                     </table>
-                                    <tbody>
-                                        <tr>
-                                            <th></th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
                                 </div>
                             </div>
                         </div>
@@ -309,18 +304,49 @@
         </div>
     </main>
 
-    <script>
-        $(document).ready(function () {
-           $.ajax({
-               url: "/api/dgTourState",
-               method: "get",
-               contentType: "application/json; charset=utf-8",
-               dataType: "text",
-               success: function(result) {
+    <script th:inline="javascript">
 
-                   console.log(result);
-               }
-           });
+        let tbody = document.querySelector('tbody');
+
+        $.ajax({
+            url: "/api/dgTourState",
+            method: "get",
+            async: true,
+            contentType: "application/json",
+            dataType: "text",
+            success: function(result) {
+                console.log(result);
+                let resultParse = JSON.parse(result);
+
+                let tourCourseList = resultParse.body.tourCourseList;
+                console.log(tourCourseList);
+
+                for (let i in tourCourseList) {
+                    let distance = tourCourseList[i].distance;
+                    let tourCourse = tourCourseList[i].tourCourse;
+                    let courseNm = tourCourseList[i].courseNm;
+                    let time = tourCourseList[i].time;
+
+                    let tr = tbody.insertRow();
+                    tr.className = 'my-3';
+
+                    let th1 = tr.insertCell(0);
+                    th1.className = "px-4";
+                    th1.textContent = courseNm;
+
+                    let th2 = tr.insertCell(1);
+                    th2.className = 'px-4';
+                    th2.textContent = distance;
+
+                    let th3 = tr.insertCell(2);
+                    th3.className = 'px-4';
+                    th3.textContent = time;
+
+                    let th4 = tr.insertCell(3);
+                    th4.className = 'px-4';
+                    th4.textContent = tourCourse;
+                }
+            }
         });
     </script>
 </th:block>
